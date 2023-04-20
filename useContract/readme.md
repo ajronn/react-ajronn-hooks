@@ -1,4 +1,4 @@
-# Use polling hook
+# Use contract hook
 
 ## Description
 
