@@ -12,21 +12,22 @@ type PromiseReturning<T> = () => Promise<T>;
 export const usePolling = <T>(
   promise: PromiseReturning<T>,
   interval: number,
-  condition: () => boolean
+  condition: (data: T | null) => boolean
 ): { data: T | null } => {
   /** Data from resolved promise */
   const [data, setData] = useState<T | null>(null);
 
   /** Polling */
   const poll = async () => {
+    let result: T | null = null;
     try {
-      const result = await promise();
+      result = await promise();
       setData(result);
     } catch (error) {
       console.error(`Error polling: ${error}`);
     }
 
-    if (!condition()) {
+    if (!condition(result)) {
       setTimeout(poll, interval);
     }
   };
