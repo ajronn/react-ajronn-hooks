@@ -6,7 +6,7 @@
  * @param {{ [K in keyof T]: (value: T[K]) => boolean }} contract - The contract that the object must satisfy.
  * @returns {{ checkContract: () => boolean }} An object containing a function that checks if the object satisfies the contract.
  */
-export const useContract = <T extends Record<string, unknown>>(
+export const contractValidator = <T extends Record<string, unknown>>(
   value: T,
   contract: { [K in keyof T]: (value: T[K]) => boolean }
 ): { checkContract: () => boolean } => {
@@ -19,7 +19,11 @@ export const useContract = <T extends Record<string, unknown>>(
     return Object.keys(contract).every((key) => {
       const validationFn = contract[key as keyof T];
       const propValue = value[key as keyof T];
-      return validationFn(propValue as T[keyof T]);
+      const check = validationFn(propValue as T[keyof T]);
+      if (!check) {
+        console.error(`Invalid key %c${key}%c in contract`, "color: blue;", "");
+      }
+      return check;
     });
   };
 
