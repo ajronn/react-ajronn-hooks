@@ -8,4 +8,5 @@ Tool list:
 
 Hook list:
 
+* useInfiniteScroll
 * usePolling
